@@ -1,23 +1,395 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Inventarios Prostock</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Supabase Client SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Estilo personalizado local -->
     <link rel="stylesheet" href="css/style.css">
-    <title>Gestor de inventario</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .seccion-contenido { display: none; }
+        .seccion-activa { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
-<body>
-    <h1>Gestor de invetario Prostock</h1>
-<header>
-    <nav>
-        <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="productos.html">Productos</a></li>
-            <li><a href="proveedores.html">Proveedores</a></li>
-            <li><a href="clientes.html">Clientes</a></li>
-            <li><a href="ventas.html">Ventas</a></li>
-            <li><a href="reportes.html">Reportes</a></li>
-        </ul>
-    </nav>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex">
+
+    <!-- Sidebar de Navegación -->
+    <aside class="w-64 bg-slate-800 border-r border-slate-700 flex flex-col justify-between hidden md:flex">
+        <div>
+            <div class="p-6 border-b border-slate-700 flex items-center space-x-3">
+                <div class="p-2 bg-indigo-600 rounded-lg shadow-lg shadow-indigo-500/30">
+                    <i data-lucide="boxes" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-white leading-none">Prostock</h1>
+                    <span class="text-xs text-slate-400">Gestión de Inventario</span>
+                </div>
+            </div>
+
+            <nav class="p-4 space-y-2" id="nav-menu">
+                <button onclick="mostrarSeccion('inicio', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-indigo-600 text-white font-medium transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i><span>Inicio</span>
+                </button>
+                <button onclick="mostrarSeccion('productos', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                    <i data-lucide="package" class="w-5 h-5"></i><span>Productos</span>
+                </button>
+                <button onclick="mostrarSeccion('proveedores', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                    <i data-lucide="truck" class="w-5 h-5"></i><span>Proveedores</span>
+                </button>
+                <button onclick="mostrarSeccion('clientes', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                    <i data-lucide="users" class="w-5 h-5"></i><span>Clientes</span>
+                </button>
+                <button onclick="mostrarSeccion('ventas', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                    <i data-lucide="shopping-cart" class="w-5 h-5"></i><span>Ventas</span>
+                </button>
+                <button onclick="mostrarSeccion('reportes', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                    <i data-lucide="bar-chart-2" class="w-5 h-5"></i><span>Reportes</span>
+                </button>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-slate-700">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-white shadow-lg">
+                        U
+                    </div>
+                    <div class="text-left">
+                        <p id="user-email" class="text-sm font-medium text-white truncate max-w-[120px]">Administrador</p>
+                        <p class="text-xs text-emerald-400 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> En línea</p>
+                    </div>
+                </div>
+                <button id="btn-logout" class="p-2 text-slate-400 hover:text-red-400 transition-colors" title="Cerrar sesión">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Área Principal -->
+    <main class="flex-1 overflow-y-auto bg-slate-900 p-6 md:p-8">
+        <header class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+            <div>
+                <h2 id="titulo-seccion" class="text-2xl font-bold text-white">Inicio</h2>
+                <p id="subtitulo-seccion" class="text-slate-400 text-sm">Resumen de tu inventario y operaciones</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button onclick="abrirModalProducto()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg flex items-center space-x-2 transition-all shadow-lg shadow-indigo-600/30">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Acción Rápida</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ================= MÓDULO: INICIO ================= -->
+        <div id="seccion-inicio" class="seccion-contenido seccion-activa mt-6 space-y-6">
+            <!-- Métricas Placeholder -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 hover:border-indigo-500/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Total Productos</p>
+                            <h3 class="text-2xl font-bold text-white mt-1">0</h3>
+                        </div>
+                        <span class="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg"><i data-lucide="box" class="w-5 h-5"></i></span>
+                    </div>
+                </div>
+                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 hover:border-amber-500/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Alertas de Stock</p>
+                            <h3 class="text-2xl font-bold text-amber-400 mt-1">0</h3>
+                        </div>
+                        <span class="p-2 bg-amber-500/10 text-amber-400 rounded-lg"><i data-lucide="alert-triangle" class="w-5 h-5"></i></span>
+                    </div>
+                </div>
+                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 hover:border-emerald-500/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Ventas del Mes</p>
+                            <h3 class="text-2xl font-bold text-emerald-400 mt-1">$0.00</h3>
+                        </div>
+                        <span class="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg"><i data-lucide="trending-up" class="w-5 h-5"></i></span>
+                    </div>
+                </div>
+                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 hover:border-sky-500/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Clientes Activos</p>
+                            <h3 class="text-2xl font-bold text-sky-400 mt-1">0</h3>
+                        </div>
+                        <span class="p-2 bg-sky-500/10 text-sky-400 rounded-lg"><i data-lucide="users" class="w-5 h-5"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos de Demostración -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 relative">
+                    <div class="absolute top-2 right-2 px-2 py-1 bg-slate-700 text-xs text-slate-300 rounded">Datos de ejemplo</div>
+                    <h4 class="text-sm font-semibold text-white mb-4">Proyección de Ventas (Ejemplo)</h4>
+                    <canvas id="chart-ventas" class="w-full max-h-[250px]"></canvas>
+                </div>
+                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 relative">
+                    <div class="absolute top-2 right-2 px-2 py-1 bg-slate-700 text-xs text-slate-300 rounded">Datos de ejemplo</div>
+                    <h4 class="text-sm font-semibold text-white mb-4">Distribución por Categoría</h4>
+                    <canvas id="chart-categorias" class="w-full max-h-[250px]"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MÓDULO: PRODUCTOS ================= -->
+        <div id="seccion-productos" class="seccion-contenido mt-6">
+            <div class="bg-slate-800 rounded-xl border border-slate-700 p-5">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+                    <div class="relative w-full md:w-72">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
+                        <input type="text" placeholder="Buscar producto..." class="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <button onclick="abrirModalProducto()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm font-medium flex items-center gap-2"><i data-lucide="filter" class="w-4 h-4"></i> Filtrar</button>
+                </div>
+
+                <!-- Empty State -->
+                <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-700 rounded-xl bg-slate-900/50">
+                    <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400">
+                        <i data-lucide="package-open" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-white mb-1">Tu inventario está vacío</h3>
+                    <p class="text-slate-400 text-sm mb-4 max-w-sm">Comienza agregando tu primer producto para hacer un seguimiento de tu stock y ventas.</p>
+                    <button onclick="abrirModalProducto()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium transition-colors shadow-lg shadow-indigo-500/20">Agregar mi primer producto</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MÓDULO: PROVEEDORES ================= -->
+        <div id="seccion-proveedores" class="seccion-contenido mt-6">
+            <div class="bg-slate-800 rounded-xl border border-slate-700 p-5">
+                <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-700 rounded-xl bg-slate-900/50">
+                    <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400">
+                        <i data-lucide="truck" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-white mb-1">Sin proveedores registrados</h3>
+                    <p class="text-slate-400 text-sm mb-4 max-w-sm">Registra a tus proveedores para mantener un control de tus reabastecimientos.</p>
+                    <button class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm font-medium transition-colors">Nuevo Proveedor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MÓDULO: CLIENTES ================= -->
+        <div id="seccion-clientes" class="seccion-contenido mt-6">
+            <div class="bg-slate-800 rounded-xl border border-slate-700 p-5">
+                <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-700 rounded-xl bg-slate-900/50">
+                    <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400">
+                        <i data-lucide="users" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-white mb-1">No hay clientes aún</h3>
+                    <p class="text-slate-400 text-sm mb-4 max-w-sm">Agrega a tus clientes frecuentes para agilizar el proceso de ventas.</p>
+                    <button class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm font-medium transition-colors">Agregar Cliente</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MÓDULO: VENTAS ================= -->
+        <div id="seccion-ventas" class="seccion-contenido mt-6">
+            <div class="bg-slate-800 rounded-xl border border-slate-700 p-5">
+                <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-700 rounded-xl bg-slate-900/50">
+                    <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400">
+                        <i data-lucide="shopping-cart" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-white mb-1">No se han registrado ventas</h3>
+                    <p class="text-slate-400 text-sm mb-4 max-w-sm">Cuando realices tu primera venta, aparecerá en este historial.</p>
+                    <button class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium transition-colors shadow-lg shadow-emerald-500/20">Registrar Venta Manual</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MÓDULO: REPORTES ================= -->
+        <div id="seccion-reportes" class="seccion-contenido mt-6">
+            <div class="bg-slate-800 rounded-xl border border-slate-700 p-5">
+                <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-700 rounded-xl bg-slate-900/50">
+                    <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400">
+                        <i data-lucide="file-bar-chart-2" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-white mb-1">Generación de Reportes</h3>
+                    <p class="text-slate-400 text-sm mb-4 max-w-sm">Aún no hay suficientes datos para generar un reporte mensual o trimestral. Continúa operando para ver estadísticas.</p>
+                    <button class="px-4 py-2 bg-slate-700 text-slate-400 cursor-not-allowed rounded-lg text-sm font-medium transition-colors" disabled>Generar PDF</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal para Agregar Producto -->
+    <div id="modal-producto" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-6 shadow-2xl transform transition-all scale-95 opacity-0" id="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-white">Nuevo Producto</h3>
+                <button onclick="cerrarModalProducto()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form id="form-producto" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Nombre del Producto</label>
+                    <input type="text" id="prod-nombre" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Categoría</label>
+                    <select id="prod-categoria" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <option>Electrónica</option>
+                        <option>Herramientas</option>
+                        <option>Ropa</option>
+                        <option>Alimentos</option>
+                        <option>Otros</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Cantidad Stock</label>
+                        <input type="number" id="prod-stock" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Precio Unitario ($)</label>
+                        <input type="number" step="0.01" id="prod-precio" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="cerrarModalProducto()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium">Guardar Producto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/supabase.js"></script>
+    <script src="js/login.js"></script>
+
+    <script>
+        // Inicializar Iconos
+        lucide.createIcons();
+
+        // Subtítulos por sección
+        const subtitulos = {
+            'inicio': 'Resumen de tu inventario y operaciones',
+            'productos': 'Gestiona tu catálogo y existencias',
+            'proveedores': 'Directorio de tus proveedores',
+            'clientes': 'Administración de cartera de clientes',
+            'ventas': 'Historial de tickets y facturas',
+            'reportes': 'Análisis de rendimiento'
+        };
+
+        // Lógica de Navegación del menú
+        function mostrarSeccion(idSeccion, elementoClikeado) {
+            // 1. Ocultar todas las secciones
+            document.querySelectorAll('.seccion-contenido').forEach(el => {
+                el.classList.remove('seccion-activa');
+            });
+            
+            // 2. Mostrar la sección seleccionada
+            document.getElementById('seccion-' + idSeccion).classList.add('seccion-activa');
+
+            // 3. Cambiar título y subtítulo superior
+            const tituloBonito = idSeccion.charAt(0).toUpperCase() + idSeccion.slice(1);
+            document.getElementById('titulo-seccion').innerText = tituloBonito;
+            document.getElementById('subtitulo-seccion').innerText = subtitulos[idSeccion];
+
+            // 4. Actualizar colores del menú lateral (si se hizo clic en el sidebar)
+            if (elementoClikeado) {
+                document.querySelectorAll('.nav-item').forEach(btn => {
+                    btn.className = "nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors";
+                });
+                elementoClikeado.className = "nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-indigo-600 text-white font-medium transition-colors";
+            }
+        }
+
+        // Lógica del Modal con animación suave
+        function abrirModalProducto() {
+            const modal = document.getElementById('modal-producto');
+            const content = document.getElementById('modal-content');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function cerrarModalProducto() {
+            const modal = document.getElementById('modal-producto');
+            const content = document.getElementById('modal-content');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 200);
+        }
+
+        // --- INICIALIZAR GRÁFICOS (DATOS FALSOS PARA QUE SE VEA VIVO) ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gráfico de Ventas
+            const ctxVentas = document.getElementById('chart-ventas').getContext('2d');
+            new Chart(ctxVentas, {
+                type: 'line',
+                data: {
+                    labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+                    datasets: [{
+                        label: 'Ventas Simuladas ($)',
+                        data: [120, 190, 30, 50, 220, 300, 90],
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+                        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+
+            // Gráfico de Categorías
+            const ctxCats = document.getElementById('chart-categorias').getContext('2d');
+            new Chart(ctxCats, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Electrónica', 'Ropa', 'Herramientas', 'Otros'],
+                    datasets: [{
+                        data: [40, 20, 25, 15],
+                        backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#64748b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
