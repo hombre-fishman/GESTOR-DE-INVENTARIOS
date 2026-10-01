@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dashboardApp.classList.add('hidden');
     }
 
-    
     const loginHTML = `
         <div id="pantalla-login" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-4">
             <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-2xl max-w-sm w-full">
@@ -53,11 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Buscar el botón de cerrar sesión en el menú lateral (si existe)
     const btnLogout = document.getElementById('btn-logout') || document.querySelector('button[title="Cerrar sesión"]');
 
-    // 4. Lógica de Autenticación con Supabase
-    if (window.supabase) {
+    // 4. Lógica de Autenticación con Supabase (Actualizada a window.supabaseClient)
+    if (window.supabaseClient) {
         
         // Escuchar el estado de la sesión (se dispara al cargar la página y al hacer login/logout)
-        supabase.auth.onAuthStateChange((event, session) => {
+        window.supabaseClient.auth.onAuthStateChange((event, session) => {
             if (session) {
                 // Usuario logueado: Ocultar login, mostrar dashboard
                 pantallaLogin.classList.add('hidden');
@@ -85,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnSubmit.innerHTML = 'Verificando...';
             btnSubmit.disabled = true;
 
-            const { error } = await supabase.auth.signInWithPassword({
+            const { error } = await window.supabaseClient.auth.signInWithPassword({
                 email: email,
                 password: password
             });
@@ -104,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Cerrar sesión
         if (btnLogout) {
             btnLogout.addEventListener('click', async () => {
-                await supabase.auth.signOut();
+                await window.supabaseClient.auth.signOut();
             });
         }
     } else {

@@ -64,8 +64,9 @@
                 </nav>
             </div>
 
+            <!-- PERFIL DE USUARIO Y BOTÓN DE LOGOUT -->
             <div class="p-4 border-t border-slate-700">
-                <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center space-x-3">
                         <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-white shadow-lg" id="user-avatar">
                             U
@@ -76,6 +77,11 @@
                         </div>
                     </div>
                 </div>
+                <!-- Botón Cerrar Sesión -->
+                <button id="btn-logout" class="flex items-center justify-center gap-2 px-4 py-2 w-full bg-slate-800 hover:bg-red-600/20 text-slate-400 hover:text-red-400 border border-slate-700 hover:border-red-500/50 rounded-lg transition-all shadow-sm">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span class="text-sm font-medium">Cerrar Sesión</span>
+                </button>
             </div>
         </aside>
 
