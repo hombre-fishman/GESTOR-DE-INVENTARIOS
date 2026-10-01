@@ -8,21 +8,14 @@ const db = window.supabase.createClient(
 
 console.log("✅ Cliente de Supabase creado");
 
-
 async function probarConexion() {
-
-    const { data, error } = await db
-        .from("productos")
-        .select("*")
-        .limit(5);
+    const { data, error } = await db.auth.getSession();
 
     if (error) {
-        console.error("❌ Error con Supabase:", error);
-        return;
+        console.error("❌ Error de conexión:", error);
+    } else {
+        console.log("✅ Conexión con Supabase funcionando", data);
     }
-
-    console.log("✅ Conexión con Supabase funcionando");
-    console.log("Productos:", data);
 }
 
 probarConexion();
