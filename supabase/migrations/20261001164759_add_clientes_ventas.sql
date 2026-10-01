@@ -197,4 +197,4 @@ CREATE POLICY "Usuarios autenticados pueden registrar detalle ventas"
 ON public.detalle_ventas
 FOR INSERT
 TO authenticated
-WITH CHECK (true);
+WITH CHECK (true);n
