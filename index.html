@@ -26,9 +26,38 @@
 </head>
 <body class="bg-slate-900 text-slate-100 h-screen overflow-hidden">
 
+    <!-- ================= PANTALLA DE LOGIN ================= -->
+    <div id="pantalla-login" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-4">
+        <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-2xl max-w-sm w-full">
+            <div class="text-center mb-8">
+                <div class="w-14 h-14 bg-indigo-600 rounded-xl mx-auto flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/30">
+                    <i data-lucide="boxes" class="w-8 h-8 text-white"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-white">Prostock</h2>
+                <p class="text-sm text-slate-400 mt-1">Inicia sesión para continuar</p>
+            </div>
+            
+            <form id="form-login" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Correo Electrónico</label>
+                    <input type="email" id="login-email" required placeholder="admin@empresa.com" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Contraseña</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors">
+                </div>
+                
+                <p id="login-error" class="text-xs text-red-400 text-center hidden">Credenciales incorrectas.</p>
+                
+                <button type="submit" id="btn-submit-login" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium transition-colors shadow-lg shadow-indigo-600/30 flex justify-center items-center gap-2">
+                    Ingresar al Sistema
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- ================= CONTENEDOR DEL DASHBOARD ================= -->
-    <!-- Se eliminó la clase 'hidden' para que se muestre directo al entrar -->
-    <div id="dashboard-app" class="flex w-full h-full">
+    <div id="dashboard-app" class="flex w-full h-full hidden">
         
         <!-- Sidebar de Navegación -->
         <aside class="w-64 bg-slate-800 border-r border-slate-700 flex flex-col justify-between hidden md:flex h-full">
@@ -72,10 +101,13 @@
                             U
                         </div>
                         <div class="text-left w-24">
-                            <p id="user-email" class="text-sm font-medium text-white truncate w-full">Usuario Local</p>
+                            <p id="user-email" class="text-sm font-medium text-white truncate w-full">Usuario</p>
                             <p class="text-xs text-emerald-400 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> En línea</p>
                         </div>
                     </div>
+                    <button id="btn-logout" class="p-2 text-slate-400 hover:text-red-400 transition-colors" title="Cerrar sesión">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
                 </div>
             </div>
         </aside>
@@ -383,9 +415,9 @@
         </div>
     </div>
 
-    <!-- Scripts de Supabase -->
+    <!-- Scripts de Supabase y Funciones -->
     <script src="js/supabase.js"></script>
-    <!-- Se removió js/login.js por ahora para evitar conflictos -->
+    <script src="js/login.js"></script>
 
     <script>
         lucide.createIcons();
@@ -422,6 +454,63 @@
             new Chart(document.getElementById('chart-ventas'), { type: 'line', data: { labels: ['L', 'M', 'M', 'J', 'V', 'S', 'D'], datasets: [{ data: [10, 25, 15, 30, 45, 20, 50], borderColor: '#4f46e5', tension: 0.4 }] }, options: { plugins: { legend: { display: false } } }});
             new Chart(document.getElementById('chart-categorias'), { type: 'doughnut', data: { labels: ['A', 'B', 'C'], datasets: [{ data: [40, 30, 30], backgroundColor: ['#4f46e5', '#10b981', '#f59e0b'] }] }});
         });
+
+        // ----------------------------------------------------
+        // LÓGICA DE AUTENTICACIÓN (LOGIN) 
+        // ----------------------------------------------------
+        const pantallaLogin = document.getElementById('pantalla-login');
+        const dashboardApp = document.getElementById('dashboard-app');
+        const emailLabel = document.getElementById('user-email');
+        const avatar = document.getElementById('user-avatar');
+        
+        // Listener de Supabase para mostrar/ocultar el dashboard
+        if(window.supabase) {
+            supabase.auth.onAuthStateChange((event, session) => {
+                if (session) {
+                    pantallaLogin.classList.add('hidden');
+                    dashboardApp.classList.remove('hidden');
+                    emailLabel.innerText = session.user.email;
+                    avatar.innerText = session.user.email.charAt(0).toUpperCase();
+                } else {
+                    pantallaLogin.classList.remove('hidden');
+                    dashboardApp.classList.add('hidden');
+                }
+            });
+        }
+
+        // Login Submit
+        document.getElementById('form-login').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const btnSubmit = document.getElementById('btn-submit-login');
+            const msjError = document.getElementById('login-error');
+            
+            msjError.classList.add('hidden');
+            btnSubmit.innerHTML = 'Verificando...';
+            btnSubmit.disabled = true;
+
+            if(window.supabase) {
+                const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
+                if (error) {
+                    msjError.innerText = 'Correo o contraseña incorrectos.';
+                    msjError.classList.remove('hidden');
+                } else {
+                    document.getElementById('form-login').reset();
+                }
+            } else {
+                msjError.innerText = 'Supabase no inicializado. Revisa supabase.js';
+                msjError.classList.remove('hidden');
+            }
+            btnSubmit.innerHTML = 'Ingresar al Sistema';
+            btnSubmit.disabled = false;
+        });
+
+        // Logout
+        document.getElementById('btn-logout').addEventListener('click', async () => {
+            if(window.supabase) await supabase.auth.signOut();
+        });
+
     </script>
 </body>
 </html>
