@@ -20,84 +20,83 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
         .seccion-contenido { display: none; }
-        .seccion-activa { display: block; animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .seccion-activa { display: block; animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 h-screen overflow-hidden">
+<body class="bg-[#F5F3EF] text-stone-800 h-screen overflow-hidden selection:bg-indigo-100 selection:text-indigo-900">
 
     <!-- ================= CONTENEDOR DEL DASHBOARD ================= -->
     <div id="dashboard-app" class="flex w-full h-full">
         
         <!-- Sidebar de Navegación -->
-        <aside class="w-64 bg-slate-800 border-r border-slate-700 flex flex-col justify-between hidden md:flex h-full">
+        <aside class="w-64 bg-[#EBE8E1] border-r border-stone-300/60 flex flex-col justify-between hidden md:flex h-full shadow-sm">
             <div>
-                <div class="p-6 border-b border-slate-700 flex items-center space-x-3">
-                    <div class="p-2 bg-indigo-600 rounded-lg shadow-lg shadow-indigo-500/30">
-                        <i data-lucide="boxes" class="w-6 h-6 text-white"></i>
+                <div class="p-6 border-b border-stone-300/60 flex items-center space-x-3">
+                    <div class="p-2 bg-indigo-600 rounded-xl shadow-md shadow-indigo-600/20 text-white">
+                        <i data-lucide="boxes" class="w-6 h-6"></i>
                     </div>
                     <div>
-                        <h1 class="font-bold text-lg text-white leading-none">Prostock</h1>
-                        <span class="text-xs text-slate-400">Gestión de Inventario</span>
+                        <h1 class="font-bold text-lg text-stone-900 tracking-tight leading-none">Prostock</h1>
+                        <span class="text-xs text-stone-500 font-medium">Gestión de Inventario</span>
                     </div>
                 </div>
 
-                <nav class="p-4 space-y-2" id="nav-menu">
-                    <button onclick="mostrarSeccion('inicio', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-indigo-600 text-white font-medium transition-colors">
+                <nav class="p-4 space-y-1.5" id="nav-menu">
+                    <button onclick="mostrarSeccion('inicio', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-indigo-600 text-white font-semibold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/40">
                         <i data-lucide="layout-dashboard" class="w-5 h-5"></i><span>Inicio</span>
                     </button>
-                    <button onclick="mostrarSeccion('productos', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                    <button onclick="mostrarSeccion('productos', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-stone-700 hover:bg-stone-300/50 hover:text-stone-900 active:bg-stone-300/80 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-stone-400/30">
                         <i data-lucide="package" class="w-5 h-5"></i><span>Productos</span>
                     </button>
-                    <button onclick="mostrarSeccion('proveedores', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                    <button onclick="mostrarSeccion('proveedores', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-stone-700 hover:bg-stone-300/50 hover:text-stone-900 active:bg-stone-300/80 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-stone-400/30">
                         <i data-lucide="truck" class="w-5 h-5"></i><span>Proveedores</span>
                     </button>
-                    <button onclick="mostrarSeccion('clientes', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                    <button onclick="mostrarSeccion('clientes', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-stone-700 hover:bg-stone-300/50 hover:text-stone-900 active:bg-stone-300/80 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-stone-400/30">
                         <i data-lucide="users" class="w-5 h-5"></i><span>Clientes</span>
                     </button>
-                    <button onclick="mostrarSeccion('ventas', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                    <button onclick="mostrarSeccion('ventas', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-stone-700 hover:bg-stone-300/50 hover:text-stone-900 active:bg-stone-300/80 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-stone-400/30">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i><span>Ventas</span>
                     </button>
-                    <button onclick="mostrarSeccion('reportes', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                    <button onclick="mostrarSeccion('reportes', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-stone-700 hover:bg-stone-300/50 hover:text-stone-900 active:bg-stone-300/80 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-stone-400/30">
                         <i data-lucide="bar-chart-2" class="w-5 h-5"></i><span>Reportes</span>
                     </button>
                 </nav>
             </div>
 
             <!-- PERFIL DE USUARIO Y BOTÓN DE LOGOUT -->
-            <div class="p-4 border-t border-slate-700">
-                <div class="flex items-center justify-between mb-4">
+            <div class="p-4 border-t border-stone-300/60 bg-[#E8E4DC]/50">
+                <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-white shadow-lg" id="user-avatar">
+                        <div class="w-9 h-9 rounded-full bg-stone-800 text-stone-100 flex items-center justify-center font-bold text-sm shadow-sm" id="user-avatar">
                             U
                         </div>
                         <div class="text-left w-24">
-                            <p id="user-email" class="text-sm font-medium text-white truncate w-full">Usuario Local</p>
-                            <p class="text-xs text-emerald-400 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> En línea</p>
+                            <p id="user-email" class="text-xs font-semibold text-stone-900 truncate w-full">Usuario Local</p>
+                            <p class="text-[11px] text-emerald-700 font-semibold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-emerald-200"></span> En línea</p>
                         </div>
                     </div>
                 </div>
-                <!-- Botón Cerrar Sesión -->
-                <button id="btn-logout" class="flex items-center justify-center gap-2 px-4 py-2 w-full bg-slate-800 hover:bg-red-600/20 text-slate-400 hover:text-red-400 border border-slate-700 hover:border-red-500/50 rounded-lg transition-all shadow-sm">
+                <button id="btn-logout" class="flex items-center justify-center gap-2 px-3.5 py-2 w-full bg-stone-200/80 hover:bg-rose-100/80 text-stone-700 hover:text-rose-700 active:bg-rose-200/80 border border-stone-300/80 hover:border-rose-300 rounded-xl transition-all font-medium text-xs focus:outline-none focus:ring-2 focus:ring-rose-500/30">
                     <i data-lucide="log-out" class="w-4 h-4"></i>
-                    <span class="text-sm font-medium">Cerrar Sesión</span>
+                    <span>Cerrar Sesión</span>
                 </button>
             </div>
         </aside>
 
         <!-- Área Principal -->
-        <main class="flex-1 overflow-y-auto bg-slate-900 p-6 md:p-8">
-            <header class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+        <main class="flex-1 overflow-y-auto bg-[#F5F3EF] p-6 md:p-8">
+            <header class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-stone-300/60 gap-4">
                 <div>
-                    <h2 id="titulo-seccion" class="text-2xl font-bold text-white">Inicio</h2>
-                    <p id="subtitulo-seccion" class="text-slate-400 text-sm">Resumen de tu inventario y operaciones</p>
+                    <h2 id="titulo-seccion" class="text-2xl font-bold text-stone-900 tracking-tight">Inicio</h2>
+                    <p id="subtitulo-seccion" class="text-stone-600 text-sm">Resumen de tu inventario y operaciones</p>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <button onclick="abrirModalVenta()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg flex items-center space-x-2 transition-all shadow-lg shadow-emerald-600/30">
+                    <button onclick="abrirModalVenta()" class="px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 text-white font-medium rounded-xl flex items-center space-x-2 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/40">
                         <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                         <span>Nueva Venta</span>
                     </button>
-                    <button onclick="abrirModalProducto()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg flex items-center space-x-2 transition-all shadow-lg shadow-indigo-600/30">
+                    <button onclick="abrirModalProducto()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium rounded-xl flex items-center space-x-2 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40">
                         <i data-lucide="plus" class="w-4 h-4"></i>
                         <span>Nuevo Producto</span>
                     </button>
@@ -108,52 +107,52 @@
             <div id="seccion-inicio" class="seccion-contenido seccion-activa mt-6 space-y-6">
                 <!-- Métricas -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-sm hover:border-stone-300 transition-colors">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-xs text-slate-400 font-medium">Total Productos</p>
-                                <h3 class="text-2xl font-bold text-white mt-1">0</h3>
+                                <p class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Total Productos</p>
+                                <h3 class="text-2xl font-bold text-stone-900 mt-1">0</h3>
                             </div>
-                            <span class="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg"><i data-lucide="box" class="w-5 h-5"></i></span>
+                            <span class="p-2.5 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-xl"><i data-lucide="box" class="w-5 h-5"></i></span>
                         </div>
                     </div>
-                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-sm hover:border-stone-300 transition-colors">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-xs text-slate-400 font-medium">Alertas de Stock</p>
-                                <h3 class="text-2xl font-bold text-amber-400 mt-1">0</h3>
+                                <p class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Alertas de Stock</p>
+                                <h3 class="text-2xl font-bold text-amber-700 mt-1">0</h3>
                             </div>
-                            <span class="p-2 bg-amber-500/10 text-amber-400 rounded-lg"><i data-lucide="alert-triangle" class="w-5 h-5"></i></span>
+                            <span class="p-2.5 bg-amber-50 text-amber-700 border border-amber-100 rounded-xl"><i data-lucide="alert-triangle" class="w-5 h-5"></i></span>
                         </div>
                     </div>
-                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-sm hover:border-stone-300 transition-colors">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-xs text-slate-400 font-medium">Ventas del Mes</p>
-                                <h3 class="text-2xl font-bold text-emerald-400 mt-1">$0.00</h3>
+                                <p class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Ventas del Mes</p>
+                                <h3 class="text-2xl font-bold text-emerald-800 mt-1">$0.00</h3>
                             </div>
-                            <span class="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg"><i data-lucide="trending-up" class="w-5 h-5"></i></span>
+                            <span class="p-2.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-xl"><i data-lucide="trending-up" class="w-5 h-5"></i></span>
                         </div>
                     </div>
-                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-sm hover:border-stone-300 transition-colors">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-xs text-slate-400 font-medium">Clientes Activos</p>
-                                <h3 class="text-2xl font-bold text-sky-400 mt-1">0</h3>
+                                <p class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Clientes Activos</p>
+                                <h3 class="text-2xl font-bold text-sky-800 mt-1">0</h3>
                             </div>
-                            <span class="p-2 bg-sky-500/10 text-sky-400 rounded-lg"><i data-lucide="users" class="w-5 h-5"></i></span>
+                            <span class="p-2.5 bg-sky-50 text-sky-700 border border-sky-100 rounded-xl"><i data-lucide="users" class="w-5 h-5"></i></span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Gráficos -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 relative">
-                        <h4 class="text-sm font-semibold text-white mb-4">Proyección de Ventas</h4>
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-sm">
+                        <h4 class="text-sm font-bold text-stone-800 mb-4">Proyección de Ventas</h4>
                         <canvas id="chart-ventas" class="w-full max-h-[250px]"></canvas>
                     </div>
-                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 relative">
-                        <h4 class="text-sm font-semibold text-white mb-4">Distribución por Categoría</h4>
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-sm">
+                        <h4 class="text-sm font-bold text-stone-800 mb-4">Distribución por Categoría</h4>
                         <canvas id="chart-categorias" class="w-full max-h-[250px]"></canvas>
                     </div>
                 </div>
@@ -161,67 +160,67 @@
 
             <!-- ================= MÓDULO: PRODUCTOS ================= -->
             <div id="seccion-productos" class="seccion-contenido mt-6">
-                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5">
-                    <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-700 rounded-xl bg-slate-900/50">
-                        <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400">
+                <div class="bg-white rounded-2xl border border-stone-200/90 p-5 shadow-sm">
+                    <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-stone-200 rounded-xl bg-[#FAF8F5]">
+                        <div class="w-16 h-16 bg-stone-100 border border-stone-200/60 rounded-2xl flex items-center justify-center mb-4 text-stone-500 shadow-sm">
                             <i data-lucide="package-open" class="w-8 h-8"></i>
                         </div>
-                        <h3 class="text-lg font-medium text-white mb-1">Tu inventario está vacío</h3>
-                        <p class="text-slate-400 text-sm mb-4 max-w-sm">Comienza agregando tu primer producto.</p>
-                        <button onclick="abrirModalProducto()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium">Agregar mi primer producto</button>
+                        <h3 class="text-lg font-bold text-stone-900 mb-1">Tu inventario está vacío</h3>
+                        <p class="text-stone-600 text-sm mb-4 max-w-sm">Comienza agregando tu primer producto.</p>
+                        <button onclick="abrirModalProducto()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40">Agregar mi primer producto</button>
                     </div>
                 </div>
             </div>
 
             <!-- ================= MÓDULO: PROVEEDORES ================= -->
             <div id="seccion-proveedores" class="seccion-contenido mt-6">
-                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5">
-                    <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-700 rounded-xl bg-slate-900/50">
-                        <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400">
+                <div class="bg-white rounded-2xl border border-stone-200/90 p-5 shadow-sm">
+                    <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-stone-200 rounded-xl bg-[#FAF8F5]">
+                        <div class="w-16 h-16 bg-stone-100 border border-stone-200/60 rounded-2xl flex items-center justify-center mb-4 text-stone-500 shadow-sm">
                             <i data-lucide="truck" class="w-8 h-8"></i>
                         </div>
-                        <h3 class="text-lg font-medium text-white mb-1">Sin proveedores registrados</h3>
-                        <p class="text-slate-400 text-sm mb-4 max-w-sm">Registra a tus proveedores para mantener un control de tus reabastecimientos.</p>
-                        <button onclick="abrirModalProveedor()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium transition-colors">Nuevo Proveedor</button>
+                        <h3 class="text-lg font-bold text-stone-900 mb-1">Sin proveedores registrados</h3>
+                        <p class="text-stone-600 text-sm mb-4 max-w-sm">Registra a tus proveedores para mantener un control de tus reabastecimientos.</p>
+                        <button onclick="abrirModalProveedor()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40">Nuevo Proveedor</button>
                     </div>
                 </div>
             </div>
 
             <!-- ================= MÓDULO: CLIENTES ================= -->
             <div id="seccion-clientes" class="seccion-contenido mt-6">
-                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5">
-                    <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-700 rounded-xl bg-slate-900/50">
-                        <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400">
+                <div class="bg-white rounded-2xl border border-stone-200/90 p-5 shadow-sm">
+                    <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-stone-200 rounded-xl bg-[#FAF8F5]">
+                        <div class="w-16 h-16 bg-stone-100 border border-stone-200/60 rounded-2xl flex items-center justify-center mb-4 text-stone-500 shadow-sm">
                             <i data-lucide="users" class="w-8 h-8"></i>
                         </div>
-                        <h3 class="text-lg font-medium text-white mb-1">No hay clientes aún</h3>
-                        <p class="text-slate-400 text-sm mb-4 max-w-sm">Agrega a tus clientes frecuentes para agilizar el proceso de ventas.</p>
-                        <button onclick="abrirModalCliente()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium transition-colors">Agregar Cliente</button>
+                        <h3 class="text-lg font-bold text-stone-900 mb-1">No hay clientes aún</h3>
+                        <p class="text-stone-600 text-sm mb-4 max-w-sm">Agrega a tus clientes frecuentes para agilizar el proceso de ventas.</p>
+                        <button onclick="abrirModalCliente()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40">Agregar Cliente</button>
                     </div>
                 </div>
             </div>
 
             <!-- ================= MÓDULO: VENTAS ================= -->
             <div id="seccion-ventas" class="seccion-contenido mt-6">
-                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5">
-                    <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-700 rounded-xl bg-slate-900/50">
-                        <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400">
+                <div class="bg-white rounded-2xl border border-stone-200/90 p-5 shadow-sm">
+                    <div class="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-stone-200 rounded-xl bg-[#FAF8F5]">
+                        <div class="w-16 h-16 bg-stone-100 border border-stone-200/60 rounded-2xl flex items-center justify-center mb-4 text-stone-500 shadow-sm">
                             <i data-lucide="shopping-cart" class="w-8 h-8"></i>
                         </div>
-                        <h3 class="text-lg font-medium text-white mb-1">No se han registrado ventas</h3>
-                        <p class="text-slate-400 text-sm mb-4 max-w-sm">Cuando realices tu primera venta, aparecerá en este historial.</p>
-                        <button onclick="abrirModalVenta()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium transition-colors shadow-lg shadow-emerald-500/20">Registrar Venta</button>
+                        <h3 class="text-lg font-bold text-stone-900 mb-1">No se han registrado ventas</h3>
+                        <p class="text-stone-600 text-sm mb-4 max-w-sm">Cuando realices tu primera venta, aparecerá en este historial.</p>
+                        <button onclick="abrirModalVenta()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 text-white rounded-xl text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/40">Registrar Venta</button>
                     </div>
                 </div>
             </div>
 
             <!-- ================= MÓDULO: REPORTES ================= -->
             <div id="seccion-reportes" class="seccion-contenido mt-6">
-                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 text-center py-12">
-                    <div class="w-16 h-16 bg-slate-800 rounded-full mx-auto flex items-center justify-center mb-4 text-slate-400">
+                <div class="bg-white rounded-2xl border border-stone-200/90 p-5 text-center py-12 shadow-sm">
+                    <div class="w-16 h-16 bg-stone-100 border border-stone-200/60 rounded-2xl mx-auto flex items-center justify-center mb-4 text-stone-500 shadow-sm">
                         <i data-lucide="file-bar-chart-2" class="w-8 h-8"></i>
                     </div>
-                    <p class="text-slate-400">Módulo de Reportes PDF en Construcción...</p>
+                    <p class="text-stone-600 font-medium">Módulo de Reportes PDF en Construcción...</p>
                 </div>
             </div>
         </main>
@@ -230,158 +229,156 @@
     <!-- ================= MODALES DE CREACIÓN ================= -->
 
     <!-- Modal Producto -->
-    <div id="modal-producto" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-6 shadow-2xl">
+    <div id="modal-producto" class="fixed inset-0 bg-stone-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-all">
+        <div class="bg-white border border-stone-200 rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-white">Nuevo Producto</h3>
-                <button onclick="cerrarModalProducto()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+                <h3 class="text-lg font-bold text-stone-900">Nuevo Producto</h3>
+                <button onclick="cerrarModalProducto()" class="p-1 text-stone-400 hover:text-stone-700 hover:bg-stone-100 rounded-lg transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="form-producto" class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2">
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Nombre del Producto</label>
-                        <input type="text" id="prod-nombre" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Nombre del Producto</label>
+                        <input type="text" id="prod-nombre" required class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">SKU / Código</label>
-                        <input type="text" id="prod-sku" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-bold text-stone-700 mb-1">SKU / Código</label>
+                        <input type="text" id="prod-sku" class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Categoría</label>
-                        <select id="prod-categoria" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Categoría</label>
+                        <select id="prod-categoria" class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                             <option>Electrónica</option><option>Herramientas</option><option>Ropa</option><option>Otros</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Stock Actual</label>
-                        <input type="number" id="prod-stock" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Stock Actual</label>
+                        <input type="number" id="prod-stock" required class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Stock Mínimo</label>
-                        <input type="number" id="prod-stock-min" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Stock Mínimo</label>
+                        <input type="number" id="prod-stock-min" required class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Precio Unitario ($)</label>
-                        <input type="number" step="0.01" id="prod-precio" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Precio Unitario ($)</label>
+                        <input type="number" step="0.01" id="prod-precio" required class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                 </div>
-                <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" onclick="cerrarModalProducto()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium">Guardar</button>
+                <div class="flex justify-end space-x-3 pt-4 border-t border-stone-200/80">
+                    <button type="button" onclick="cerrarModalProducto()" class="px-4 py-2 bg-stone-200/80 hover:bg-stone-300 text-stone-800 rounded-xl text-sm font-semibold transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/40">Guardar</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Modal Proveedor -->
-    <div id="modal-proveedor" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-6 shadow-2xl">
+    <div id="modal-proveedor" class="fixed inset-0 bg-stone-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-all">
+        <div class="bg-white border border-stone-200 rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-white">Nuevo Proveedor</h3>
-                <button onclick="cerrarModalProveedor()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+                <h3 class="text-lg font-bold text-stone-900">Nuevo Proveedor</h3>
+                <button onclick="cerrarModalProveedor()" class="p-1 text-stone-400 hover:text-stone-700 hover:bg-stone-100 rounded-lg transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="form-proveedor" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Nombre de la Empresa</label>
-                    <input type="text" id="prov-nombre" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <label class="block text-xs font-bold text-stone-700 mb-1">Nombre de la Empresa</label>
+                    <input type="text" id="prov-nombre" required class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Contacto Principal</label>
-                    <input type="text" id="prov-contacto" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <label class="block text-xs font-bold text-stone-700 mb-1">Contacto Principal</label>
+                    <input type="text" id="prov-contacto" class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Teléfono</label>
-                        <input type="tel" id="prov-tel" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Teléfono</label>
+                        <input type="tel" id="prov-tel" class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Email</label>
-                        <input type="email" id="prov-email" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Email</label>
+                        <input type="email" id="prov-email" class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                 </div>
-                <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" onclick="cerrarModalProveedor()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium">Registrar</button>
+                <div class="flex justify-end space-x-3 pt-4 border-t border-stone-200/80">
+                    <button type="button" onclick="cerrarModalProveedor()" class="px-4 py-2 bg-stone-200/80 hover:bg-stone-300 text-stone-800 rounded-xl text-sm font-semibold transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/40">Registrar</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Modal Cliente -->
-    <div id="modal-cliente" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-6 shadow-2xl">
+    <div id="modal-cliente" class="fixed inset-0 bg-stone-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-all">
+        <div class="bg-white border border-stone-200 rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-white">Nuevo Cliente</h3>
-                <button onclick="cerrarModalCliente()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+                <h3 class="text-lg font-bold text-stone-900">Nuevo Cliente</h3>
+                <button onclick="cerrarModalCliente()" class="p-1 text-stone-400 hover:text-stone-700 hover:bg-stone-100 rounded-lg transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="form-cliente" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Nombre Completo / Razón Social</label>
-                    <input type="text" id="cli-nombre" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <label class="block text-xs font-bold text-stone-700 mb-1">Nombre Completo / Razón Social</label>
+                    <input type="text" id="cli-nombre" required class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Teléfono</label>
-                        <input type="tel" id="cli-tel" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Teléfono</label>
+                        <input type="tel" id="cli-tel" class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Email</label>
-                        <input type="email" id="cli-email" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Email</label>
+                        <input type="email" id="cli-email" class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Dirección (Opcional)</label>
-                    <input type="text" id="cli-direccion" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <label class="block text-xs font-bold text-stone-700 mb-1">Dirección (Opcional)</label>
+                    <input type="text" id="cli-direccion" class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                 </div>
-                <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" onclick="cerrarModalCliente()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium">Registrar</button>
+                <div class="flex justify-end space-x-3 pt-4 border-t border-stone-200/80">
+                    <button type="button" onclick="cerrarModalCliente()" class="px-4 py-2 bg-stone-200/80 hover:bg-stone-300 text-stone-800 rounded-xl text-sm font-semibold transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/40">Registrar</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Modal Venta -->
-    <div id="modal-venta" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-6 shadow-2xl">
+    <div id="modal-venta" class="fixed inset-0 bg-stone-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-all">
+        <div class="bg-white border border-stone-200 rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-white">Registrar Nueva Venta</h3>
-                <button onclick="cerrarModalVenta()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+                <h3 class="text-lg font-bold text-stone-900">Registrar Nueva Venta</h3>
+                <button onclick="cerrarModalVenta()" class="p-1 text-stone-400 hover:text-stone-700 hover:bg-stone-100 rounded-lg transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="form-venta" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Seleccionar Cliente</label>
-                    <select id="venta-cliente" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <label class="block text-xs font-bold text-stone-700 mb-1">Seleccionar Cliente</label>
+                    <select id="venta-cliente" class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                         <option value="">Cliente Mostrador (Público General)</option>
-                        <!-- Los clientes reales se cargarán desde BD aquí -->
                     </select>
                 </div>
                 <div class="grid grid-cols-3 gap-4">
                     <div class="col-span-2">
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Producto</label>
-                        <select id="venta-producto" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Producto</label>
+                        <select id="venta-producto" required class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                             <option value="">Seleccione un producto...</option>
-                            <!-- Los productos reales se cargarán desde BD aquí -->
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Cantidad</label>
-                        <input type="number" id="venta-cantidad" min="1" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Cantidad</label>
+                        <input type="number" id="venta-cantidad" min="1" required class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Método de Pago</label>
-                    <select id="venta-metodo" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <label class="block text-xs font-bold text-stone-700 mb-1">Método de Pago</label>
+                    <select id="venta-metodo" required class="w-full bg-[#FAF8F5] border border-stone-300/80 rounded-xl p-2.5 text-sm text-stone-900 focus:bg-white focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                         <option value="efectivo">Efectivo</option>
                         <option value="tarjeta">Tarjeta de Crédito/Débito</option>
                         <option value="transferencia">Transferencia</option>
                     </select>
                 </div>
-                <div class="flex justify-between items-center pt-4 mt-4 border-t border-slate-700">
-                    <span class="text-sm text-slate-400">Total a cobrar: <strong class="text-white text-lg ml-2">$0.00</strong></span>
+                <div class="flex justify-between items-center pt-4 mt-4 border-t border-stone-200">
+                    <span class="text-xs text-stone-600 font-semibold">Total a cobrar: <strong class="text-stone-900 text-xl ml-2 font-bold">$0.00</strong></span>
                     <div class="flex space-x-3">
-                        <button type="button" onclick="cerrarModalVenta()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm">Cancelar</button>
-                        <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium shadow-lg shadow-emerald-500/20">Procesar Venta</button>
+                        <button type="button" onclick="cerrarModalVenta()" class="px-4 py-2 bg-stone-200/80 hover:bg-stone-300 text-stone-800 rounded-xl text-sm font-semibold transition-colors">Cancelar</button>
+                        <button type="submit" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 text-white rounded-xl text-sm font-semibold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-emerald-600/40">Procesar Venta</button>
                     </div>
                 </div>
             </form>
@@ -392,26 +389,22 @@
     <script src="js/supabase.js"></script>
     <script src="js/login.js"></script> 
     <script src="js/productos.js"></script>
-     <script src="js/proveedores.js"></script>
+    <script src="js/proveedores.js"></script> 
 
     <script>
         lucide.createIcons();
 
-        // ----------------------------------------------------
-        // LÓGICA DEL SISTEMA (Navegación e Interfaz)
-        // ----------------------------------------------------
         function mostrarSeccion(idSeccion, elementoClikeado) {
             document.querySelectorAll('.seccion-contenido').forEach(el => el.classList.remove('seccion-activa'));
             document.getElementById('seccion-' + idSeccion).classList.add('seccion-activa');
             document.getElementById('titulo-seccion').innerText = idSeccion.charAt(0).toUpperCase() + idSeccion.slice(1);
             
             if (elementoClikeado) {
-                document.querySelectorAll('.nav-item').forEach(btn => btn.className = "nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors");
-                elementoClikeado.className = "nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-indigo-600 text-white font-medium transition-colors";
+                document.querySelectorAll('.nav-item').forEach(btn => btn.className = "nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-stone-700 hover:bg-stone-300/50 hover:text-stone-900 active:bg-stone-300/80 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-stone-400/30");
+                elementoClikeado.className = "nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-indigo-600 text-white font-semibold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/40";
             }
         }
         
-        // Control de Modales
         function abrirModalProducto() { document.getElementById('modal-producto').classList.replace('hidden', 'flex'); }
         function cerrarModalProducto() { document.getElementById('modal-producto').classList.replace('flex', 'hidden'); }
         
@@ -424,13 +417,32 @@
         function abrirModalVenta() { document.getElementById('modal-venta').classList.replace('hidden', 'flex'); }
         function cerrarModalVenta() { document.getElementById('modal-venta').classList.replace('flex', 'hidden'); }
 
-        // Gráficos de Muestra
         document.addEventListener('DOMContentLoaded', function() {
-            new Chart(document.getElementById('chart-ventas'), { type: 'line', data: { labels: ['L', 'M', 'M', 'J', 'V', 'S', 'D'], datasets: [{ data: [10, 25, 15, 30, 45, 20, 50], borderColor: '#4f46e5', tension: 0.4 }] }, options: { plugins: { legend: { display: false } } }});
-            new Chart(document.getElementById('chart-categorias'), { type: 'doughnut', data: { labels: ['A', 'B', 'C'], datasets: [{ data: [40, 30, 30], backgroundColor: ['#4f46e5', '#10b981', '#f59e0b'] }] }});
+            new Chart(document.getElementById('chart-ventas'), { 
+                type: 'line', 
+                data: { 
+                    labels: ['L', 'M', 'M', 'J', 'V', 'S', 'D'], 
+                    datasets: [{ 
+                        data: [10, 25, 15, 30, 45, 20, 50], 
+                        borderColor: '#4f46e5', 
+                        backgroundColor: 'rgba(79, 70, 229, 0.08)',
+                        fill: true,
+                        tension: 0.4 
+                    }] 
+                }, 
+                options: { plugins: { legend: { display: false } } }
+            });
+            new Chart(document.getElementById('chart-categorias'), { 
+                type: 'doughnut', 
+                data: { 
+                    labels: ['A', 'B', 'C'], 
+                    datasets: [{ 
+                        data: [40, 30, 30], 
+                        backgroundColor: ['#4f46e5', '#047857', '#b45309'] 
+                    }] 
+                }
+            });
         });
-
-
     </script>
 </body>
 </html>
