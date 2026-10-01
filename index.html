@@ -1,15 +1,37 @@
-<!-- ================= PANTALLA DE LOGIN / REGISTRO ================= -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Inventarios Prostock</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .seccion-contenido { display: none; }
+        .seccion-activa { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+    <!-- ================= PANTALLA DE LOGIN ================= -->
     <div id="login-view" class="flex min-h-screen items-center justify-center p-4">
         <div class="w-full max-w-md bg-slate-800 rounded-2xl border border-slate-700 p-8 shadow-2xl">
             <div class="flex flex-col items-center mb-8">
                 <div class="p-3 bg-indigo-600 rounded-xl shadow-lg shadow-indigo-500/30 mb-4">
                     <i data-lucide="boxes" class="w-8 h-8 text-white"></i>
                 </div>
-                <h2 id="auth-title" class="text-2xl font-bold text-white">Bienvenido a Prostock</h2>
-                <p id="auth-subtitle" class="text-slate-400 text-sm mt-1">Ingresa a tu cuenta para continuar</p>
+                <h2 class="text-2xl font-bold text-white">Bienvenido a Prostock</h2>
+                <p class="text-slate-400 text-sm mt-1">Ingresa a tu cuenta para continuar</p>
             </div>
 
-            <!-- Formulario de Login -->
             <form id="form-login" class="space-y-5">
                 <div>
                     <label class="block text-sm font-medium text-slate-300 mb-1">Correo Electrónico</label>
@@ -25,39 +47,111 @@
                         <input type="password" id="login-password" required placeholder="••••••••" class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-indigo-500 transition-colors">
                     </div>
                 </div>
-                <div id="login-error" class="hidden bg-red-500/10 border border-red-500/50 text-red-400 text-sm p-3 rounded-lg text-center"></div>
+
+                <div id="login-error" class="hidden bg-red-500/10 border border-red-500/50 text-red-400 text-sm p-3 rounded-lg text-center">
+                    Credenciales incorrectas.
+                </div>
+
                 <button type="submit" id="btn-submit-login" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition-all shadow-lg shadow-indigo-500/25 flex justify-center items-center gap-2">
                     <span>Iniciar Sesión</span>
                 </button>
             </form>
-
-            <!-- Formulario de Registro (Oculto por defecto) -->
-            <form id="form-register" class="space-y-5 hidden">
-                <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1">Nuevo Correo Electrónico</label>
-                    <div class="relative">
-                        <i data-lucide="mail" class="absolute left-3 top-3 w-5 h-5 text-slate-400"></i>
-                        <input type="email" id="register-email" required placeholder="admin@prostock.com" class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-indigo-500 transition-colors">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1">Crear Contraseña (mínimo 6 caracteres)</label>
-                    <div class="relative">
-                        <i data-lucide="lock" class="absolute left-3 top-3 w-5 h-5 text-slate-400"></i>
-                        <input type="password" id="register-password" minlength="6" required placeholder="••••••••" class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-indigo-500 transition-colors">
-                    </div>
-                </div>
-                <div id="register-msg" class="hidden text-sm p-3 rounded-lg text-center"></div>
-                <button type="submit" id="btn-submit-register" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg transition-all shadow-lg shadow-emerald-500/25 flex justify-center items-center gap-2">
-                    <span>Crear Cuenta</span>
-                </button>
-            </form>
-
-            <!-- Botón para alternar entre Login y Registro -->
-            <div class="mt-6 text-center">
-                <button id="btn-toggle-auth" type="button" class="text-sm text-slate-400 hover:text-indigo-400 transition-colors">
-                    ¿No tienes cuenta? Regístrate aquí
-                </button>
-            </div>
         </div>
     </div>
+
+    <!-- ================= PANEL PRINCIPAL (DASHBOARD) ================= -->
+    <div id="dashboard-view" class="hidden min-h-screen flex">
+        
+        <!-- Sidebar de Navegación -->
+        <aside class="w-64 bg-slate-800 border-r border-slate-700 flex flex-col justify-between hidden md:flex">
+            <div>
+                <div class="p-6 border-b border-slate-700 flex items-center space-x-3">
+                    <div class="p-2 bg-indigo-600 rounded-lg shadow-lg shadow-indigo-500/30">
+                        <i data-lucide="boxes" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg text-white leading-none">Prostock</h1>
+                        <span class="text-xs text-slate-400">Gestión de Inventario</span>
+                    </div>
+                </div>
+
+                <nav class="p-4 space-y-2" id="nav-menu">
+                    <button onclick="mostrarSeccion('inicio', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-indigo-600 text-white font-medium transition-colors">
+                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i><span>Inicio</span>
+                    </button>
+                    <button onclick="mostrarSeccion('productos', this)" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                        <i data-lucide="package" class="w-5 h-5"></i><span>Productos</span>
+                    </button>
+                    <!-- Agrega aquí el resto de botones de tu menú si lo deseas (Proveedores, Clientes, etc.) -->
+                </nav>
+            </div>
+
+            <div class="p-4 border-t border-slate-700">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-white shadow-lg">U</div>
+                        <div class="text-left overflow-hidden">
+                            <!-- Aquí inyectaremos el correo del usuario logueado -->
+                            <p id="user-email-display" class="text-sm font-medium text-white truncate w-24">Cargando...</p>
+                            <p class="text-xs text-emerald-400 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> En línea</p>
+                        </div>
+                    </div>
+                    <button id="btn-logout" class="p-2 text-slate-400 hover:text-red-400 transition-colors" title="Cerrar sesión">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Área Principal -->
+        <main class="flex-1 overflow-y-auto bg-slate-900 p-6 md:p-8">
+            <header class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+                <div>
+                    <h2 id="titulo-seccion" class="text-2xl font-bold text-white">Inicio</h2>
+                    <p id="subtitulo-seccion" class="text-slate-400 text-sm">Resumen de tu inventario y operaciones</p>
+                </div>
+            </header>
+
+            <!-- Módulo Inicio -->
+            <div id="seccion-inicio" class="seccion-contenido seccion-activa mt-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                        <p class="text-xs text-slate-400 font-medium">Estado de Conexión</p>
+                        <h3 class="text-xl font-bold text-emerald-400 mt-1 flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-5 h-5"></i> Conectado a BD
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Módulo Productos -->
+            <div id="seccion-productos" class="seccion-contenido mt-6">
+                 <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 text-center py-12">
+                     <h3 class="text-lg font-medium text-white">Módulo de Productos</h3>
+                 </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Lógica de UI básica -->
+    <script>
+        lucide.createIcons();
+
+        function mostrarSeccion(idSeccion, elementoClikeado) {
+            document.querySelectorAll('.seccion-contenido').forEach(el => el.classList.remove('seccion-activa'));
+            document.getElementById('seccion-' + idSeccion).classList.add('seccion-activa');
+            
+            if (elementoClikeado) {
+                document.querySelectorAll('.nav-item').forEach(btn => {
+                    btn.className = "nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition-colors";
+                });
+                elementoClikeado.className = "nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-indigo-600 text-white font-medium transition-colors";
+            }
+        }
+    </script>
+
+    <!-- Tus scripts reales -->
+    <script src="js/supabase.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>
