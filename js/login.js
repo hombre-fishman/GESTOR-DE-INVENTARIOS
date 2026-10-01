@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dashboardApp.classList.add('hidden');
     }
 
-    // 2. Inyectar la interfaz de Login dinámicamente en el body
+    
     const loginHTML = `
         <div id="pantalla-login" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-4">
             <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-2xl max-w-sm w-full">
