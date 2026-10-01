@@ -65,6 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Actualizar perfil visual en el dashboard
                 if (emailLabel) emailLabel.innerText = session.user.email;
                 if (avatar) avatar.innerText = session.user.email.charAt(0).toUpperCase();
+                if (typeof cargarProductos === 'function') {
+                    cargarProductos();
+                }
             } else {
                 // Sin sesión: Mostrar login, ocultar dashboard
                 pantallaLogin.classList.remove('hidden');
